@@ -109,6 +109,38 @@ footer a{color:var(--ardosia)}footer a:hover{color:var(--nevoa)}
 </style>
 </head>
 <body>
+<!-- password gate (client-side, demo) -->
+<div id="dgate" style="position:fixed;inset:0;z-index:99999;background:#0D1B2A;display:flex;align-items:center;justify-content:center;font-family:Manrope,Inter,system-ui,sans-serif">
+  <div style="width:340px;max-width:90vw;background:#12263B;border:1px solid #1e3550;border-radius:16px;padding:32px;text-align:center">
+    <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1E6FEB,#25D366);display:grid;place-items:center;color:#0D1B2A;font-weight:800;font-size:28px;margin:0 auto 18px">d</div>
+    <h2 style="color:#EAF2FB;font-size:20px;margin:0 0 6px;font-weight:800">Acesso restrito</h2>
+    <p style="color:#8AA0B8;font-size:14px;margin:0 0 20px">Digite a senha para continuar.</p>
+    <input id="dgpw" type="password" placeholder="Senha" autocomplete="off" style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid #1e3550;background:#0D1B2A;color:#EAF2FB;font-size:15px;outline:none">
+    <p id="dgerr" style="color:#ff6b6b;font-size:13px;height:16px;margin:8px 0 0"></p>
+    <button id="dgbtn" style="margin-top:12px;width:100%;padding:12px;border:0;border-radius:10px;background:#25D366;color:#062012;font-weight:700;font-size:15px;font-family:Manrope,sans-serif;cursor:pointer">Entrar</button>
+  </div>
+</div>
+<script>
+(function(){
+  var HASH="00033b907dadf1e9050ec6a0093fd8c8f434da0e90957c56caf27ed5eab4028d", KEY="dabbl_auth";
+  var gate=document.getElementById('dgate');
+  function ok(){gate.remove();document.documentElement.style.overflow='';}
+  if(sessionStorage.getItem(KEY)===HASH){ok();return;}
+  document.documentElement.style.overflow='hidden';
+  async function sha(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');}
+  async function tryit(){
+    var v=document.getElementById('dgpw').value;
+    var h=await sha(v);
+    if(h===HASH){sessionStorage.setItem(KEY,HASH);ok();}
+    else{document.getElementById('dgerr').textContent='Senha incorreta';document.getElementById('dgpw').value='';}
+  }
+  document.getElementById('dgbtn').addEventListener('click',tryit);
+  document.getElementById('dgpw').addEventListener('keydown',function(e){if(e.key==='Enter')tryit();});
+  setTimeout(function(){document.getElementById('dgpw').focus();},50);
+})();
+</script>
+<!-- /password gate -->
+
 
 <nav><div class="wrap">
   <div class="brand"><div class="logo">d</div>dabbl</div>
