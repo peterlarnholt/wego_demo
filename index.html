@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dabbl — Tá tudo resolvido no zap</title>
+<meta name="description" content="dabbl é o amigo que resolve o seu dia dentro do WhatsApp. Briefings diários, futebol ao vivo, lembretes e um assistente de IA. Nada para instalar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sol:#FFB627; --verde:#2FBF71; --coral:#FF6B5A;
+  --grafite:#2B2D33; --creme:#FFF9F0; --branco:#ffffff;
+  --sombra:0 12px 40px rgba(43,45,51,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--grafite);background:var(--creme);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.wm{font-family:'Poppins',sans-serif;letter-spacing:-.02em}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:'Poppins';font-weight:600;font-size:16px;padding:14px 26px;border-radius:999px;border:0;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.btn-primary{background:var(--verde);color:#fff;box-shadow:0 8px 22px rgba(47,191,113,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(47,191,113,.45)}
+.btn-ghost{background:#fff;color:var(--grafite);box-shadow:var(--sombra)}
+.btn-ghost:hover{transform:translateY(-2px)}
+.wa{width:20px;height:20px;flex:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,249,240,.82);backdrop-filter:blur(12px);border-bottom:1px solid rgba(43,45,51,.06)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
+.wm{font-weight:800;font-size:26px;color:var(--grafite);display:flex;align-items:center;gap:2px}
+.wm .dot{color:var(--coral)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-weight:500;font-size:15px;color:#5b5d63}
+.nav-links a:hover{color:var(--grafite)}
+.nav-cta{padding:10px 20px;font-size:15px}
+@media(max-width:820px){.nav-links a:not(.nav-cta){display:none}}
+
+/* HERO */
+.hero{padding:64px 0 40px;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(43,45,51,.08);border-radius:999px;padding:7px 16px;font-size:13px;font-weight:600;color:#7a7c82;box-shadow:var(--sombra);margin-bottom:22px}
+.pill .live{width:8px;height:8px;border-radius:50%;background:var(--verde);box-shadow:0 0 0 0 rgba(47,191,113,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,191,113,.55)}70%{box-shadow:0 0 0 10px rgba(47,191,113,0)}100%{box-shadow:0 0 0 0 rgba(47,191,113,0)}}
+.hero h1{font-size:60px;font-weight:800;line-height:1.02;margin-bottom:20px}
+.hero h1 .hi{color:var(--coral)}
+.hero p.lead{font-size:20px;color:#5b5d63;max-width:520px;margin-bottom:30px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero-cta small{display:block;color:#8b8d93;font-size:13.5px;margin-top:14px}
+.hero-cta small b{color:var(--verde)}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr;gap:36px}.hero h1{font-size:44px}}
+
+/* PHONE MOCKUP */
+.phone{width:320px;justify-self:center;background:#111b21;border-radius:38px;padding:12px;box-shadow:0 30px 70px rgba(43,45,51,.28);border:1px solid #263238}
+.phone-top{height:26px;display:flex;justify-content:center}
+.notch{width:120px;height:26px;background:#111b21;border-radius:0 0 16px 16px}
+.chat{background:#e5ddd5;background-image:linear-gradient(rgba(229,221,213,.9),rgba(229,221,213,.9));border-radius:26px;overflow:hidden}
+.chat-hd{background:#075E54;color:#fff;display:flex;align-items:center;gap:11px;padding:12px 14px}
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--sol),var(--coral));display:flex;align-items:center;justify-content:center;font-family:'Poppins';font-weight:800;color:#fff;font-size:18px}
+.chat-hd .nm{font-family:'Poppins';font-weight:600;font-size:15px;line-height:1.1}
+.chat-hd .st{font-size:11px;opacity:.8}
+.chat-body{padding:14px 12px 18px;display:flex;flex-direction:column;gap:9px;min-height:430px}
+.bub{max-width:82%;padding:9px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.bub.in{background:#fff;align-self:flex-start;border-top-left-radius:3px}
+.bub.out{background:#dcf8c6;align-self:flex-end;border-top-right-radius:3px}
+.bub .t{display:block;text-align:right;font-size:10px;color:#8a8d91;margin-top:3px}
+.bub b{font-weight:600}
+.day{align-self:center;background:rgba(255,255,255,.75);color:#5b5d63;font-size:11px;padding:4px 12px;border-radius:8px;margin:2px 0}
+
+/* TRUST STRIP */
+.strip{background:var(--grafite);color:#fff;padding:22px 0}
+.strip-in{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;align-items:center;font-size:15px;font-weight:500}
+.strip-in span{display:flex;align-items:center;gap:9px;opacity:.92}
+.strip .em{font-size:20px}
+
+/* SECTIONS */
+section{padding:84px 0}
+.eyebrow{font-family:'Poppins';font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin-bottom:12px}
+.h2{font-size:40px;font-weight:800;line-height:1.08;margin-bottom:16px;max-width:640px}
+.sec-lead{font-size:18px;color:#5b5d63;max-width:600px;margin-bottom:8px}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:48px}
+.card{background:#fff;border-radius:22px;padding:30px 26px;box-shadow:var(--sombra);transition:transform .18s ease}
+.card:hover{transform:translateY(-6px)}
+.ic{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:18px}
+.card h3{font-size:19px;font-weight:600;margin-bottom:8px}
+.card p{font-size:15px;color:#5b5d63}
+@media(max-width:920px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.feat-grid{grid-template-columns:1fr}.h2{font-size:30px}}
+
+/* STEPS */
+.steps{background:#fff}
+.step-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:52px}
+.step{position:relative;padding-left:0;text-align:center}
+.step .n{width:52px;height:52px;border-radius:50%;background:var(--creme);color:var(--coral);font-family:'Poppins';font-weight:800;font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;border:2px solid var(--sol)}
+.step h3{font-size:19px;font-weight:600;margin-bottom:8px}
+.step p{font-size:15px;color:#5b5d63;max-width:280px;margin:0 auto}
+@media(max-width:720px){.step-grid{grid-template-columns:1fr;gap:36px}}
+
+/* FUTEBOL BAND */
+.futebol{background:linear-gradient(135deg,var(--sol),var(--coral));color:#fff;border-radius:32px;padding:56px 48px;display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center;box-shadow:0 24px 60px rgba(255,107,90,.28)}
+.futebol .eyebrow{color:rgba(255,255,255,.85)}
+.futebol h2{font-family:'Poppins';font-size:36px;font-weight:800;line-height:1.06;margin-bottom:14px}
+.futebol p{font-size:18px;opacity:.95;max-width:440px}
+.score-card{background:rgba(255,255,255,.16);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:22px}
+.score-row{display:flex;align-items:center;justify-content:space-between;font-family:'Poppins';font-weight:600;font-size:17px;padding:9px 0}
+.score-row .g{font-size:22px;font-weight:800}
+.score-card .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.1em;opacity:.85;margin-bottom:6px}
+.score-card hr{border:0;border-top:1px solid rgba(255,255,255,.22);margin:4px 0}
+@media(max-width:820px){.futebol{grid-template-columns:1fr;padding:40px 28px}.futebol h2{font-size:28px}}
+
+/* PRICING */
+.price-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:52px;max-width:760px}
+.plan{background:#fff;border-radius:24px;padding:36px 32px;box-shadow:var(--sombra);border:2px solid transparent;position:relative}
+.plan.pro{border-color:var(--verde)}
+.plan .tag{position:absolute;top:-13px;left:32px;background:var(--verde);color:#fff;font-family:'Poppins';font-weight:600;font-size:12px;padding:5px 14px;border-radius:999px}
+.plan h3{font-size:22px;font-weight:700;margin-bottom:6px}
+.plan .desc{color:#5b5d63;font-size:15px;margin-bottom:20px}
+.plan .amt{font-family:'Poppins';font-size:44px;font-weight:800;line-height:1}
+.plan .amt small{font-size:16px;font-weight:500;color:#8b8d93}
+.plan ul{list-style:none;margin:22px 0 26px;display:flex;flex-direction:column;gap:11px}
+.plan li{font-size:15px;display:flex;gap:10px;align-items:flex-start}
+.plan li .ck{color:var(--verde);font-weight:800;flex:none}
+.plan .btn{width:100%;justify-content:center}
+@media(max-width:640px){.price-grid{grid-template-columns:1fr}}
+
+/* FINAL CTA */
+.final{text-align:center;background:var(--grafite);color:#fff;border-radius:32px;padding:72px 32px;margin:0 0 84px}
+.final h2{font-family:'Poppins';font-size:42px;font-weight:800;margin-bottom:16px}
+.final p{font-size:19px;opacity:.85;max-width:520px;margin:0 auto 30px}
+.final .btn-primary{font-size:18px;padding:16px 34px}
+
+/* FOOTER */
+footer{padding:44px 0;border-top:1px solid rgba(43,45,51,.08)}
+.foot-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.foot-in .wm{font-size:22px}
+.foot-links{display:flex;gap:26px;font-size:14px;color:#7a7c82}
+.foot-note{width:100%;font-size:13px;color:#9b9da3;margin-top:8px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="#" class="wm">dabbl<span class="dot">.</span></a>
+    <div class="nav-links">
+      <a href="#recursos">Recursos</a>
+      <a href="#como">Como funciona</a>
+      <a href="#precos">Preços</a>
+      <a href="#comecar" class="btn btn-primary nav-cta">
+        <svg class="wa" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.15-1.7-.84-2-.94-.26-.1-.45-.15-.64.15-.19.28-.73.94-.9 1.13-.16.19-.33.21-.62.07-1.7-.85-2.8-1.52-3.92-3.44-.3-.51.3-.47.85-1.58.1-.19.05-.35-.02-.5-.08-.14-.64-1.54-.88-2.11-.23-.55-.47-.48-.64-.48l-.55-.01c-.19 0-.5.07-.76.35s-1 .98-1 2.38 1.02 2.76 1.17 2.95c.14.19 2.02 3.08 4.9 4.32.68.29 1.22.47 1.63.6.69.22 1.31.19 1.8.11.55-.08 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33zM12 2.04C6.5 2.04 2.04 6.5 2.04 12c0 1.76.46 3.42 1.28 4.86L2 22l5.28-1.38A9.9 9.9 0 0 0 12 21.96c5.5 0 9.96-4.46 9.96-9.96S17.5 2.04 12 2.04z"/></svg>
+        Começar
+      </a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill"><span class="live"></span> Feito pra você, aqui no Brasil</span>
+      <h1>Tá tudo <span class="hi">resolvido.</span></h1>
+      <p class="lead">O dabbl é aquele amigo que resolve o seu dia — direto no WhatsApp. Notícia, tempo, futebol, lembrete e um assistente de verdade. <b>Nada pra instalar.</b></p>
+      <div class="hero-cta">
+        <a href="#comecar" class="btn btn-primary">
+          <svg class="wa" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.15-1.7-.84-2-.94-.26-.1-.45-.15-.64.15-.19.28-.73.94-.9 1.13-.16.19-.33.21-.62.07-1.7-.85-2.8-1.52-3.92-3.44-.3-.51.3-.47.85-1.58.1-.19.05-.35-.02-.5-.08-.14-.64-1.54-.88-2.11-.23-.55-.47-.48-.64-.48l-.55-.01c-.19 0-.5.07-.76.35s-1 .98-1 2.38 1.02 2.76 1.17 2.95c.14.19 2.02 3.08 4.9 4.32.68.29 1.22.47 1.63.6.69.22 1.31.19 1.8.11.55-.08 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33zM12 2.04C6.5 2.04 2.04 6.5 2.04 12c0 1.76.46 3.42 1.28 4.86L2 22l5.28-1.38A9.9 9.9 0 0 0 12 21.96c5.5 0 9.96-4.46 9.96-9.96S17.5 2.04 12 2.04z"/></svg>
+          Falar com o dabbl
+        </a>
+        <a href="#como" class="btn btn-ghost">Ver como funciona</a>
+      </div>
+      <div class="hero-cta"><small>✅ Grátis pra começar · pronto em <b>30 segundos</b> · sem cadastro chato</small></div>
+    </div>
+
+    <div class="phone">
+      <div class="phone-top"><div class="notch"></div></div>
+      <div class="chat">
+        <div class="chat-hd">
+          <div class="avatar">d</div>
+          <div><div class="nm">dabbl</div><div class="st">online agora</div></div>
+        </div>
+        <div class="chat-body">
+          <div class="day">hoje</div>
+          <div class="bub in">Bom dia! ☀️ Aqui vai o seu resumo:<br><br>🌤 <b>28°C</b> em São Paulo, sem chuva.<br>📰 3 notícias que importam pra você.<br>⚽ O <b>Corinthians</b> joga <b>hoje 21h</b>.<span class="t">07:00</span></div>
+          <div class="bub out">show! me lembra de pagar o boleto da luz amanhã 🙏<span class="t">07:02</span></div>
+          <div class="bub in">Fechou 👊 Te aviso amanhã às 9h sobre o <b>boleto da luz</b>.<span class="t">07:02</span></div>
+          <div class="bub out">e como ficou o jogo ontem?<span class="t">07:03</span></div>
+          <div class="bub in">Deu <b>Palmeiras 2 x 0</b> ✅<br>Gols de Estêvão e Raphael Veiga. Quer os melhores momentos?<span class="t">07:03</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="wrap strip-in">
+    <span><span class="em">💬</span> Dentro do WhatsApp que você já usa</span>
+    <span><span class="em">⚡</span> Sem baixar app, sem cadastro</span>
+    <span><span class="em">🇧🇷</span> Feito pro Brasil</span>
+  </div>
+</div>
+
+<section id="recursos">
+  <div class="wrap">
+    <div class="eyebrow">O que o dabbl faz</div>
+    <h2 class="h2">Um amigo que resolve — o dia inteiro.</h2>
+    <p class="sec-lead">Ele te manda o que importa antes de você pedir. É proativo, é local, e fala do seu jeito.</p>
+    <div class="feat-grid">
+      <div class="card">
+        <div class="ic" style="background:#FFF1D6">☀️</div>
+        <h3>Briefing diário</h3>
+        <p>Bom dia com tempo, notícias e a sua agenda. Boa noite com o resumo do dia. Todo dia, sem falta.</p>
+      </div>
+      <div class="card">
+        <div class="ic" style="background:#DCF6E7">⚽</div>
+        <h3>Futebol ao vivo</h3>
+        <p>Brasileirão, Libertadores e Copa 2026. Resultado do seu time na hora, direto no zap.</p>
+      </div>
+      <div class="card">
+        <div class="ic" style="background:#FFE3DF">⏰</div>
+        <h3>Lembretes espertos</h3>
+        <p>“Me lembra do boleto amanhã” — e pronto. Ele entende, guarda e te avisa na hora certa.</p>
+      </div>
+      <div class="card">
+        <div class="ic" style="background:#EDE7FF">✨</div>
+        <h3>Assistente de IA</h3>
+        <p>Traduz, resume, escreve, calcula e responde. É só mandar mensagem, igual pra um amigo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="como" class="steps">
+  <div class="wrap">
+    <div class="eyebrow">Como funciona</div>
+    <h2 class="h2">Começar leva 30 segundos.</h2>
+    <div class="step-grid">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Manda um “oi”</h3>
+        <p>Você abre o WhatsApp e fala com o dabbl. Sem baixar nada, sem senha, sem formulário.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>Conta o seu jeito</h3>
+        <p>Seu time, sua cidade, seus horários. Em segundos ele já sabe o que te mandar.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Relaxa</h3>
+        <p>Todo dia ele chega primeiro com o que importa. Tá tudo resolvido.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="futebol">
+      <div>
+        <div class="eyebrow">Copa 2026 ao vivo</div>
+        <h2>O jogo do seu time no seu bolso.</h2>
+        <p>Gol, resultado e classificação na hora que acontece. Chega de ficar procurando — o dabbl te avisa primeiro.</p>
+      </div>
+      <div class="score-card">
+        <div class="lbl">Copa do Mundo · Semifinal</div>
+        <div class="score-row"><span>🏴 Inglaterra</span><span class="g">—</span></div>
+        <hr>
+        <div class="score-row"><span>🇦🇷 Argentina</span><span class="g">—</span></div>
+        <div class="lbl" style="margin-top:12px;opacity:.9">Hoje · 16h (BRT) · Atlanta</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="precos">
+  <div class="wrap">
+    <div class="eyebrow">Preços</div>
+    <h2 class="h2">Comece de graça. Melhore quando quiser.</h2>
+    <p class="sec-lead">Sem pegadinha, sem fidelidade. Pague no PIX, cancele quando quiser.</p>
+    <div class="price-grid">
+      <div class="plan">
+        <h3>Grátis</h3>
+        <p class="desc">O essencial do seu dia, sempre.</p>
+        <div class="amt">R$0<small> /pra sempre</small></div>
+        <ul>
+          <li><span class="ck">✓</span> Briefing diário (manhã)</li>
+          <li><span class="ck">✓</span> Resultados de futebol do seu time</li>
+          <li><span class="ck">✓</span> Lembretes básicos</li>
+        </ul>
+        <a href="#comecar" class="btn btn-ghost">Começar grátis</a>
+      </div>
+      <div class="plan pro">
+        <span class="tag">Mais popular</span>
+        <h3>Pro</h3>
+        <p class="desc">O amigo completo, sempre por perto.</p>
+        <div class="amt">R$19,90<small> /mês</small></div>
+        <ul>
+          <li><span class="ck">✓</span> Tudo do Grátis, e mais:</li>
+          <li><span class="ck">✓</span> Briefing manhã <b>e</b> noite</li>
+          <li><span class="ck">✓</span> Assistente de IA todo dia</li>
+          <li><span class="ck">✓</span> Lembretes e notas de voz</li>
+          <li><span class="ck">✓</span> Suporte prioritário</li>
+        </ul>
+        <a href="#comecar" class="btn btn-primary">Assinar o Pro</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comecar">
+  <div class="wrap">
+    <div class="final">
+      <h2>Bora deixar tudo resolvido?</h2>
+      <p>Manda um “oi” pro dabbl agora. Em 30 segundos ele já tá cuidando do seu dia.</p>
+      <a href="https://wa.me/000000000000?text=Oi%20dabbl!" class="btn btn-primary">
+        <svg class="wa" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.15-1.7-.84-2-.94-.26-.1-.45-.15-.64.15-.19.28-.73.94-.9 1.13-.16.19-.33.21-.62.07-1.7-.85-2.8-1.52-3.92-3.44-.3-.51.3-.47.85-1.58.1-.19.05-.35-.02-.5-.08-.14-.64-1.54-.88-2.11-.23-.55-.47-.48-.64-.48l-.55-.01c-.19 0-.5.07-.76.35s-1 .98-1 2.38 1.02 2.76 1.17 2.95c.14.19 2.02 3.08 4.9 4.32.68.29 1.22.47 1.63.6.69.22 1.31.19 1.8.11.55-.08 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33zM12 2.04C6.5 2.04 2.04 6.5 2.04 12c0 1.76.46 3.42 1.28 4.86L2 22l5.28-1.38A9.9 9.9 0 0 0 12 21.96c5.5 0 9.96-4.46 9.96-9.96S17.5 2.04 12 2.04z"/></svg>
+        Falar com o dabbl no WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <a href="#" class="wm">dabbl<span class="dot">.</span></a>
+    <div class="foot-links">
+      <a href="#recursos">Recursos</a>
+      <a href="#precos">Preços</a>
+      <a href="#">Privacidade</a>
+      <a href="#">Contato</a>
+    </div>
+    <div class="foot-note">© 2026 dabbl · Feito com carinho pro Brasil 🇧🇷 · Tá tudo resolvido.</div>
+  </div>
+</footer>
+
+</body>
+</html>
